@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Secondary 2 History Quiz</title>
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f4f7;
+    margin: 0;
+    padding: 20px;
+    transition: 0.3s;
+}
+
+.dark {
+    background: #121212;
+    color: white;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px #aaa;
+}
+
+.dark .container {
+    background: #1e1e1e;
+}
+
+h1 {
+    text-align: center;
+    color: #003366;
+}
+
+.dark h1 {
+    color: #66b3ff;
+}
+
+button {
+    background: #0066cc;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 8px;
+}
+
+button:hover {
+    background: #004c99;
+}
+
+.chapter {
+    display: block;
+    margin: 10px;
+}
+
+.question {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.option {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.option:hover {
+    background: #e6f2ff;
+}
+
+.dark .option:hover {
+    background: #333;
+}
+
+.hidden {
+    display: none;
+}
+
+#progress {
+    height: 10px;
+    background: #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+#bar {
+    height: 10px;
+    width: 0%;
+    background: #0066cc;
+    border-radius: 10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<button onclick="darkMode()">🌙 Dark Mode</button>
+
+<h1>Secondary 2 History Quiz</h1>
+
+<div id="setup">
+
+<h2>Select Chapters</h2>
+
+<label class="chapter">
+<input type="checkbox" value="1">
+Chapter 1 - Causes of World War I
+</label>
+
+<label class="chapter">
+<input type="checkbox" value="2">
+Chapter 2 - Treaty of Versailles
+</label>
+
+<label class="chapter">
+<input type="checkbox" value="4">
+Chapter 4 - World War II
+</label>
+
+<label class="chapter">
+<input type="checkbox" value="5">
+Chapter 5 - Cold War
+</label>
+
+<label class="chapter">
+<input type="checkbox" value="6">
+Chapter 6 - Decolonisation
+</label>
+
+<label class="chapter">
+<input type="checkbox" value="9">
+Chapter 9 - Singapore History
+</label>
+
+<button onclick="startQuiz()">
+Start 10 Question Quiz
+</button>
+
+</div>
+
+<div id="quiz" class="hidden">
+
+<div id="progress">
+<div id="bar"></div>
+</div>
+
+<h3 id="number"></h3>
+
+<div class="question" id="question"></div>
+
+<div id="options"></div>
+
+</div>
+
+<div id="result" class="hidden">
+
+<h2 id="score"></h2>
+
+<button onclick="location.reload()">
+Restart
+</button>
+
+</div>
+
+</div><script>
+
+const questionBank = [
+
+{
+chapter:1,
+question:"What event triggered the start of World War I?",
+options:[
+"Attack on Pearl Harbor",
+"Assassination of Archduke Franz Ferdinand",
+"Invasion of Poland",
+"Russian Revolution"
+],
+answer:1,
+explanation:"The assassination of Archduke Franz Ferdinand of Austria-Hungary in 1914 triggered a chain of events that led to World War I."
+},
+
+{
+chapter:1,
+question:"Which countries formed the Triple Entente?",
+options:[
+"Germany, Italy and Japan",
+"Britain, France and Russia",
+"USA, Germany and Italy",
+"China, Russia and Japan"
+],
+answer:1,
+explanation:"The Triple Entente consisted mainly of Britain, France and Russia before World War I."
+},
+
+{
+chapter:2,
+question:"Which treaty officially ended World War I?",
+options:[
+"Treaty of Versailles",
+"Treaty of Rome",
+"Treaty of Paris",
+"Treaty of London"
+],
+answer:0,
+explanation:"The Treaty of Versailles was signed in 1919 and formally ended the war between Germany and the Allied Powers."
+},
+
+{
+chapter:2,
+question:"Which country was blamed for causing World War I under the Treaty of Versailles?",
+options:[
+"France",
+"Britain",
+"Germany",
+"Russia"
+],
+answer:2,
+explanation:"Germany was forced to accept responsibility for the war through the War Guilt Clause."
+},
+
+{
+chapter:4,
+question:"Which event marked the beginning of World War II in Europe?",
+options:[
+"Invasion of Poland",
+"Attack on Pearl Harbor",
+"D-Day",
+"Battle of Britain"
+],
+answer:0,
+explanation:"Germany invaded Poland in September 1939, causing Britain and France to declare war on Germany."
+},
+
+{
+chapter:4,
+question:"Which countries were part of the Axis Powers?",
+options:[
+"Britain, France, USA",
+"Germany, Italy, Japan",
+"China, Russia, USA",
+"France, Germany, Britain"
+],
+answer:1,
+explanation:"The main Axis Powers were Germany, Italy and Japan."
+},
+
+{
+chapter:5,
+question:"The Cold War was mainly a conflict between which two powers?",
+options:[
+"USA and Soviet Union",
+"China and Japan",
+"Britain and France",
+"Germany and Italy"
+],
+answer:0,
+explanation:"The Cold War was a rivalry between the United States and the Soviet Union after World War II."
+},
+
+{
+chapter:5,
+question:"What was one major difference between the USA and USSR during the Cold War?",
+options:[
+"Language",
+"Economic and political systems",
+"Climate",
+"Population size"
+],
+answer:1,
+explanation:"The USA supported capitalism while the USSR supported communism."
+},
+
+{
+chapter:6,
+question:"What does decolonisation mean?",
+options:[
+"Countries gaining independence from colonial rule",
+"Countries starting wars",
+"Countries forming alliances",
+"Countries becoming richer"
+],
+answer:0,
+explanation:"Decolonisation refers to colonies becoming independent from imperial powers."
+},
+
+{
+chapter:9,
+question:"Singapore became independent in which year?",
+options:[
+"1945",
+"1959",
+"1965",
+"1971"
+],
+answer:2,
+explanation:"Singapore became an independent nation on 9 August 1965."
+}
+
+];
+
+
+let quiz = [];
+let currentQuestion = 0;
+let score = 0;
+
+
+function startQuiz(){
+
+let selected = [...document.querySelectorAll(
+"input[type=checkbox]:checked"
+)].map(x=>Number(x.value));
+
+
+if(selected.length===0){
+alert("Please select at least one chapter.");
+return;
+}
+
+
+let available = questionBank.filter(
+q=>selected.includes(q.chapter)
+);
+
+
+if(available.length < 10){
+alert("Not enough questions yet for these chapters. More questions will be added in the next part.");
+return;
+}
+
+
+quiz = available.sort(
+()=>Math.random()-0.5
+).slice(0,10);
+
+
+document.getElementById("setup").classList.add("hidden");
+
+document.getElementById("quiz").classList.remove("hidden");
+
+
+showQuestion();
+
+}
+
+
+
+function showQuestion(){
+
+let q = quiz[currentQuestion];
+
+
+document.getElementById("number").innerHTML =
+"Question "+(currentQuestion+1)+" / 10";
+
+
+document.getElementById("question").innerHTML =
+q.question;
+
+
+let html="";
+
+
+q.options.forEach((option,index)=>{
+
+html += `
+<div class="option" onclick="checkAnswer(${index})">
+${option}
+</div>
+`;
+
+});
+
+
+document.getElementById("options").innerHTML=html;
+
+
+document.getElementById("bar").style.width =
+((currentQuestion)/10*100)+"%";
+
+}
+
+
+
+function checkAnswer(choice){
+
+let q = quiz[currentQuestion];
+
+
+if(choice===q.answer){
+score++;
+alert("✅ Correct!\n\n"+q.explanation);
+}
+else{
+alert("❌ Wrong!\n\nCorrect answer: "
++q.options[q.answer]
++"\n\n"+q.explanation);
+}
+
+
+currentQuestion++;
+
+
+if(currentQuestion<10){
+showQuestion();
+}
+else{
+finishQuiz();
+}
+
+}
+
+
+
+function finishQuiz(){
+
+document.getElementById("quiz").classList.add("hidden");
+
+document.getElementById("result").classList.remove("hidden");
+
+
+document.getElementById("score").innerHTML =
+"You scored "+score+" / 10";
+
+}
+
+
+function darkMode(){
+
+document.body.classList.toggle("dark");
+
+}
+
+
+</script><script>
+
+/* SAVE SCORE SYSTEM */
+
+function saveScore(){
+
+let oldScores = JSON.parse(
+localStorage.getItem("historyScores")
+) || [];
+
+
+oldScores.push({
+score: score,
+date: new Date().toLocaleDateString()
+});
+
+
+localStorage.setItem(
+"historyScores",
+JSON.stringify(oldScores)
+);
+
+}
+
+
+
+function showHistory(){
+
+let scores = JSON.parse(
+localStorage.getItem("historyScores")
+) || [];
+
+
+if(scores.length===0){
+alert("No quiz history yet.");
+return;
+}
+
+
+let text="Quiz History:\n\n";
+
+
+scores.forEach((s,index)=>{
+
+text += 
+(index+1)+". "+
+s.score+
+"/10 - "+
+s.date+
+"\n";
+
+});
+
+
+alert(text);
+
+}
+
+
+
+/* UPDATE FINISH FUNCTION */
+
+const oldFinishQuiz = finishQuiz;
+
+
+finishQuiz = function(){
+
+saveScore();
+
+oldFinishQuiz();
+
+
+let best = getBestScore();
+
+
+document.getElementById("score").innerHTML +=
+"<br><br>🏆 Best Score: "+best+"/10";
+
+};
+
+
+
+function getBestScore(){
+
+let scores = JSON.parse(
+localStorage.getItem("historyScores")
+) || [];
+
+
+if(scores.length===0){
+return score;
+}
+
+
+let best = 0;
+
+
+scores.forEach(s=>{
+
+if(s.score > best){
+best=s.score;
+}
+
+});
+
+
+return best;
+
+}
+
+
+
+/* EXTRA QUESTION BANK */
+
+questionBank.push(
+
+{
+chapter:9,
+question:"Who was Singapore's first Prime Minister?",
+options:[
+"Lee Kuan Yew",
+"Goh Chok Tong",
+"Yusof Ishak",
+"Lim Chin Siong"
+],
+answer:0,
+explanation:"Lee Kuan Yew became Singapore's first Prime Minister in 1959."
+},
+
+
+{
+chapter:9,
+question:"Singapore joined Malaysia in which year?",
+options:[
+"1963",
+"1965",
+"1959",
+"1970"
+],
+answer:0,
+explanation:"Singapore joined Malaysia on 16 September 1963 before becoming independent in 1965."
+},
+
+
+{
+chapter:6,
+question:"Which organisation was created after World War II to encourage international cooperation?",
+options:[
+"United Nations",
+"NATO",
+"Warsaw Pact",
+"European Union"
+],
+answer:0,
+explanation:"The United Nations was established in 1945 to promote peace and cooperation."
+},
+
+
+{
+chapter:5,
+question:"The Berlin Wall was a symbol of which conflict?",
+options:[
+"World War I",
+"Cold War",
+"Vietnam War",
+"Napoleonic Wars"
+],
+answer:1,
+explanation:"The Berlin Wall represented the division between communist East Germany and capitalist West Germany during the Cold War."
+},
+
+
+{
+chapter:4,
+question:"Which country used atomic bombs against Japan in 1945?",
+options:[
+"Germany",
+"USA",
+"Britain",
+"France"
+],
+answer:1,
+explanation:"The United States dropped atomic bombs on Hiroshima and Nagasaki in August 1945."
+}
+
+);
+
+
+/* ADD HISTORY BUTTON */
+
+let historyButton=document.createElement("button");
+
+historyButton.innerHTML=
+"📊 View Quiz History";
+
+historyButton.onclick=showHistory;
+
+
+document.getElementById("setup")
+.appendChild(historyButton);
+
+
+</script>
+
+
+</body>
+</html>
